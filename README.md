@@ -157,7 +157,7 @@ where $\Theta_t = \{\theta : \text{accessible by training trajectory up to step 
 | Low-persistence feature: topological noise | Short-lived petal: $G_{\text{coord}} > 0$ briefly, not crystallized |
 | Total persistence: $\sum(\alpha_{\text{death}} - \alpha_{\text{birth}})$ | Total coordination gain $\int_0^T G_{\text{coord}}(t) dt$ |
 | Stability theorem: $d_b(\text{Dgm}(f), \text{Dgm}(g)) \leq \|f-g\|_\infty$ | $G_{\text{coord}}$ stability: small perturbation of $\mathcal{L}$ preserves kernel |
-| Betti number $b_k = \#\{\text{points in Dgm}_k \text{ with death} = \infty\}$ | Permanent kernel dimensions: $\dim K_k$ at Imago |
+| Betti number $b_k = \lvert{\text{pts in } \text{Dgm}_k : \text{death}=\infty}\rvert$ | Permanent kernel dimensions: $\dim K_k$ at Imago |
 | The persistence module: $\{H_k(L_\alpha)\}_\alpha$ with induced maps | The coordination module: $\{K_\alpha\}_\alpha$ with inclusion maps |
 
 **The Cohen-Steiner stability theorem is the PRIMA stability theorem.** The bottleneck distance between persistence diagrams is bounded by the $L^\infty$ distance between loss functions. In ERI: small perturbations of the training data $\mathcal{L} \to \mathcal{L} + \varepsilon$ produce at most $O(\varepsilon)$ change in the $G_{\text{coord}}$ trajectory. The kernel is topologically stable. This is the first derivation of kernel stability from a proved mathematical theorem rather than empirical observation.
@@ -184,7 +184,7 @@ For $L_0 = L_1 = L$: Hamiltonian Floer homology counts 1-periodic orbits of a Ha
 
 The **Arnold conjecture** (1965): a Hamiltonian diffeomorphism $\phi_H: M \to M$ has at least $\sum_{k=0}^{2n} b_k(M)$ fixed points. Floer (1989) proved this by constructing $HF(L, \phi_H(L)) \cong H^*(L; \mathbb{Q})$, giving:
 
-$$\#\text{Fix}(\phi_H) \;\geq\; \sum_{k=0}^{2n} b_k(M) \;=\; \text{total Betti number}$$
+$$\text{card}(\text{Fix}(\phi_H)) \;\geq\; \sum_{k=0}^{2n} b_k(M) \;=\; \text{total Betti number}$$
 
 **In training dynamics:** a complete training run (a Hamiltonian diffeomorphism on parameter space) must have at least $\sum b_k$ fixed points — at least $\sum b_k$ stable attractors. The minimum number of grokking events (critical points traversed) is the total Betti number of the loss landscape.
 
@@ -208,7 +208,7 @@ The intersection $L_t \cap L_s$ consists of points $\theta^*$ where $\nabla\math
 | $HF(L_t, L_s)$: Floer homology | $G_{\text{coord}}(t,s) = I(a_t; a_s \mid X_{t-1})$: coordination gain |
 | $HF(L_t, L_s) = 0$ when $L_t \pitchfork L_s$ transversely with no intersections | $G_{\text{coord}} = 0$: independence baseline, $K_{t,s} = \emptyset$ |
 | $HF(L_t, L_s) \neq 0$: persistent intersection | $G_{\text{coord}} > 0$: crystallized kernel $K_{t,s} \neq \emptyset$ |
-| Arnold conjecture: $\#(L \cap \phi_H(L)) \geq \sum b_k$ | Min grokking events $\geq$ total Betti number of loss landscape |
+| Arnold conjecture: $\text{card}(L \cap \phi_H(L)) \geq \sum b_k$ | Min grokking events $\geq$ total Betti number of loss landscape |
 | Künneth formula: $HF(L_0\times L_2, L_1\times L_3) \cong HF(L_0,L_1)\otimes HF(L_2,L_3)$ | $G_{\text{coord}}(\text{product commons}) = G_{\text{coord}}(A)\cdot G_{\text{coord}}(B)$ |
 
 **The formal identity:** $G_{\text{coord}}(t,s) = \dim HF(L_t, L_s)$ where the Floer homology is computed with $\mathbb{Q}$ coefficients. The total $G_{\text{coord}}$ is the sum over all Floer homology groups:
@@ -227,31 +227,45 @@ The Euler characteristic is the alternating sum of Betti numbers:
 
 $$\chi(M) = \sum_{k=0}^d (-1)^k b_k$$
 
-For surfaces: $\chi = 2 - 2g$ where $g$ is the genus (number of handles). For the modular surface: $\chi(M) = -1/12$ (as an orbifold with the $\text{SL}(2,\mathbb{Z})$ action).
+For surfaces: $\chi = 2 - 2g$ where $g$ is the genus. For the modular surface $M = \text{SL}(2,\mathbb{Z})\backslash\mathbb{H}$: $\chi(M) = -1/12$ as an orbifold.
 
-The **Hopf-Poincaré theorem**: $\chi(M) = \sum_{\text{zeros}} \text{ind}(v)$ for any vector field $v$ on $M$ — the Euler characteristic equals the sum of the indices of the zeros of any vector field.
+**Hopf-Poincaré theorem.** For any smooth vector field $v$ on $M$ with isolated zeros:
 
-**In Fisher coordinates:** the gradient $v = -\nabla\mathcal{L}$ is a vector field on $\Theta$ whose zeros are critical points. The Hopf-Poincaré theorem gives:
+$$\chi(M) = \sum_{\text{zeros of } v} \text{ind}(v, p)$$
 
-$$\chi(\Theta) = \sum_{\theta^*} \text{ind}(-\nabla\mathcal{L}) = \sum_{\theta^*} (-1)^{\text{ind}(\theta^*)}$$
+where $\text{ind}(v,p) = (-1)^k$ at a non-degenerate zero of index $k$ (meaning the linearization of $v$ at $p$ has $k$ negative eigenvalues).
 
-Each index-$k$ critical point contributes $(-1)^k$ to the Euler characteristic. The signed sum of grokking events (signed by the register depth of each event) equals the topological Euler characteristic of the parameter space.
+**In Fisher coordinates.** Apply this to $v = -\nabla\mathcal{L}$, whose zeros are the critical points $\theta^*$ of the loss. Each critical point of Morse index $k$ has $\text{ind}(-\nabla\mathcal{L},\theta^*) = (-1)^k$. The Hopf-Poincaré theorem becomes:
 
-**The Gauss-Bonnet theorem** connects $\chi$ to curvature:
+$$\chi(\Theta) \;=\; \sum_{\substack{\theta^* \,:\, \nabla\mathcal{L}(\theta^*)=0}} (-1)^{\,\text{ind}(\theta^*)}$$
+
+where $\text{ind}(\theta^*)$ is the Morse index. Written by index:
+
+$$\chi(\Theta) \;=\; \sum_{k=0}^{D} (-1)^k \cdot N_k$$
+
+where $N_k$ is the number of critical points of index $k$ (the number of grokking events at register depth $k$).
+
+Each index-$k$ critical point contributes $(-1)^k$ to the Euler characteristic. The **signed sum of grokking events** — weighted $+1$ for even register depths and $-1$ for odd register depths — equals the topological Euler characteristic of the parameter space.
+
+**Gauss-Bonnet.** The Euler characteristic connects to curvature:
 
 $$\chi(M) = \frac{1}{2\pi}\int_M K\, dA$$
 
-where $K$ is the Gaussian curvature. In Fisher geometry: the integral of the Fisher curvature over parameter space equals the topological Euler characteristic. The $\phi$-equilibrium at $\chi(M) = -1/12$ (the orbifold Euler characteristic of $M = \text{SL}(2,\mathbb{Z})\backslash\mathbb{H}$) is the curvature balance at which the Fisher geometry achieves maximum entropy production.
+where $K$ is the Gaussian curvature. In Fisher geometry: the integral of the Fisher curvature equals the topological Euler characteristic. The $\phi$-equilibrium at $\chi(M) = -1/12$ (the orbifold Euler characteristic of the modular surface) is the curvature balance at which the Fisher geometry achieves maximum entropy production.
+
+---
+
+**Euler characteristic — ERI correspondence:**
 
 | Euler Characteristic | ERI Framework |
 |---|---|
-| $\chi = \sum (-1)^k b_k$: alternating Betti sum | Signed sum of grokking events by register depth |
-| $\chi = \sum_{\theta^*} (-1)^{\text{ind}(\theta^*)}$ (Hopf-Poincaré) | Alternating count: $\sum_k (-1)^k \cdot \#\{\text{depth-}k\text{ grokking events}\}$ |
-| $\chi = 0$: balanced topology (equal even/odd Betti) | $\sigma_{\text{struct}} = \sigma_{\text{behav}}$: undeformed self-dual point at $\beta = 2\pi$ |
-| $\chi > 0$: dominated by even-dimensional topology | Over-driven: even-depth groks dominate, $|\bar\Xi| > \log\phi$ |
-| $\chi < 0$: dominated by odd-dimensional topology | Under-driven: odd-depth groks dominate, $|\bar\Xi| < \log\phi$ |
-| $\chi(M) = -1/12$ (modular orbifold) | $\phi$-equilibrium: specific topological balance of $M$ |
-| Gauss-Bonnet: $\chi = \int K\, dA / 2\pi$ | Fisher curvature integral = topological invariant |
+| $\chi = \sum_k (-1)^k b_k$: alternating Betti sum | Signed sum of grokking events by register depth |
+| $\chi = \sum_{\theta^*} (-1)^{\,\text{ind}(\theta^*)}$ (Hopf-Poincaré) | $\chi = \sum_k (-1)^k N_k$: alternating count of depth-$k$ grokking events |
+| $\chi = 0$: equal even/odd Betti numbers | $\sigma_{\text{struct}} = \sigma_{\text{behav}}$: undeformed self-dual point at $\beta = 2\pi$ |
+| $\chi > 0$: even-dimensional topology dominates | Over-driven: even-depth groks dominate, $|\bar\Xi| > \log\phi$ |
+| $\chi < 0$: odd-dimensional topology dominates | Under-driven: odd-depth groks dominate, $|\bar\Xi| < \log\phi$ |
+| $\chi(M) = -1/12$ (modular orbifold) | $\phi$-equilibrium: unique topological balance of $M$ |
+| Gauss-Bonnet: $\chi = (1/2\pi)\int K\, dA$ | Fisher curvature integral = topological invariant |
 
 ---
 
@@ -263,7 +277,7 @@ For a closed oriented smooth manifold $M$ of dimension $d$:
 
 $$H_k(M;\mathbb{Q}) \;\cong\; H_{d-k}(M;\mathbb{Q}) \implies b_k = b_{d-k}$$
 
-The **Poincaré dual** of a $k$-cycle $\gamma$ is a $(d-k)$-cocycle $[\gamma]^*$ obtained by intersection. The pairing $\langle [\gamma], [\sigma]^* \rangle = \#(\gamma \cap \sigma)$ is non-degenerate.
+The **Poincaré dual** of a $k$-cycle $\gamma$ is a $(d-k)$-cocycle $[\gamma]^*$ obtained by intersection. The pairing $\langle [\gamma], [\sigma]^* \rangle = |\gamma \cap \sigma|$ is non-degenerate.
 
 **The self-dual dimension:** $b_{d/2}$ is the middle Betti number — the only one that does not have a "partner" under Poincaré duality. The **signature** $\sigma = b_+^{d/2} - b_-^{d/2}$ (where $b_\pm^{d/2}$ counts positive/negative eigenvalues of the intersection form on $H_{d/2}$) is a topological invariant independent of any metric.
 
@@ -386,7 +400,7 @@ b_k(L_α) = dim H_k({θ: L(θ) ≤ α}; Q)
          │
          ▼
 MORSE THEORY (1934):
-  C_k = #{index-k critical points of L}
+  C_k = |{index-k critical points of L}|
   b_k ≤ C_k         ←→  rank(F) ≤ min(B,D) (PRIMA Result 2)
   Σ(-1)^k C_k = χ   ←→  signed grokking count = Euler characteristic
   Min Σ C_k = Σ b_k  ←→  min grokking events = total Betti number
@@ -422,7 +436,7 @@ FLOER HOMOLOGY (1988, 1989):
   L_t ∩ L_s = K_{t,s}: shared kernel between steps t and s
   HF(L_t, L_s) = G_coord(t,s): Floer homology = coordination gain
   Pseudo-holomorphic strip = training trajectory through X_{t-1}
-  Arnold conjecture (Floer proved): #{grokking} ≥ Σ b_k
+  Arnold conjecture (Floer proved): N_grok ≥ Σ b_k
          │
          │  [Euler characteristic and Poincaré duality]
          │
@@ -453,7 +467,7 @@ IMAGO CONDITION: G_coord = Φ(K)
 | Betti number $b_k = \dim H_k(\Theta;\mathbb{Q})$ | FERN register depth $k$ dimension | Poincaré (1895), Betti (1871) | $b_k \geq 0$ |
 | Morse index-$k$ critical point | Grokking event at depth $k$ | Morse (1934) | $\Delta\text{rank}(F) = +1$ at depth $k$ |
 | Morse inequality $b_k \leq C_k$ | PRIMA rank bound $\text{rank}(F) \leq \min(B,D)$ | Morse (1934) | Both: topological bound on signal directions |
-| Total Betti number $\sum b_k$ | Min grokking events (Arnold-Floer) | Floer (1989) | $\#\{\text{grokking}\} \geq \sum b_k$ |
+| Total Betti number $\sum b_k$ | Min grokking events (Arnold-Floer) | Floer (1989) | $N_{\text{grok}} \geq \sum b_k$ |
 | Witten deformation $\Delta_t = \Delta + t^2|\nabla h|^2 + tH_h$ | Fisher dynamics $F_t = F + \beta^2|\nabla\mathcal{L}|^2 + \beta H_\mathcal{L}$ | Witten (1982) | Same operator: $t = \beta$ |
 | Optimal Witten temperature | $\phi$-equilibrium $\beta^* = 1/\log\phi$ | ERI (BETTI Result 2) | First derivation from topology |
 | SUSY algebra $\{Q, Q^\dagger\} = \Delta_t$ | Hanging Gardens: doubly-even CHORD pipeline | Witten (1982); Gates et al. (2011) | Same algebraic structure |
@@ -461,10 +475,10 @@ IMAGO CONDITION: G_coord = Φ(K)
 | Stability $d_b(\text{Dgm}(f),\text{Dgm}(g)) \leq \|f-g\|_\infty$ | Kernel stability under data perturbation | Cohen-Steiner-Edelsbrunner-Harer (2007) | First topological proof of kernel stability |
 | Lagrangian $L_t = \text{graph}(\nabla\mathcal{L}_t)$ | col$(F_t)$: Fisher column space at step $t$ | Floer (1988) | Gradient graph as Lagrangian |
 | Floer homology $HF(L_t, L_s)$ | $G_{\text{coord}}(t,s) = I(a_t;a_s\mid X_{t-1})$ | Floer (1989) | $G_{\text{coord}} = \dim HF$ |
-| Arnold conjecture: $\#\text{Fix} \geq \sum b_k$ | Min attractors $\geq$ total Betti number | Arnold (1965), Floer (1989) | Topological lower bound on grokking |
+| Arnold conjecture: $\text{card}(\text{Fix}) \geq \sum b_k$ | Min attractors $\geq$ total Betti number | Arnold (1965), Floer (1989) | Topological lower bound on grokking |
 | Euler characteristic $\chi = \sum(-1)^k b_k$ | Signed grokking balance by register depth | Poincaré (1895) | $\chi(\Theta)$ = topological constraint |
 | Poincaré duality $b_k = b_{d-k}$ | Fisher functional equation $s \leftrightarrow 1-s$ | Poincaré (1895) | Self-dual: $b_{d/2}$ = $\phi$-equilibrium |
-| LS category + 1 | Min grokking events = min FERN register depth | Lusternik-Schnirelmann (1934) | $\text{cat}(\Theta)+1 \leq \#\{\text{grokking}\}$ |
+| LS category + 1 | Min grokking events = min FERN register depth | Lusternik-Schnirelmann (1934) | $\text{cat}(\Theta)+1 \leq N_{\text{grok}}$ |
 | Cup-length lower bound on $\text{cat}$ | Max simultaneous FERN register depth | Lusternik-Schnirelmann (1934) | cup-length $\leq$ FERN depth |
 | Novikov complex with $\mathbb{Z}[t^{\pm 1}]$ ring | $G_{\text{coord}}$ weighted by coordination horizon $\delta^*$ | Novikov (1981) | $t^{\delta} =$ time-weight on trajectories |
 | Hodge Laplacian $\mathcal{L}^{(k)}$ (Bianconi) | FERN register-$k$ Fisher matrix | Bianconi (2021) | Curl subspace = $G_{\text{coord}}$ at depth $k$ |
