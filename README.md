@@ -235,9 +235,9 @@ $$\chi(M) = \sum_{\text{zeros of } v} \text{ind}(v, p)$$
 
 where $\text{ind}(v,p) = (-1)^k$ at a non-degenerate zero of index $k$ (meaning the linearization of $v$ at $p$ has $k$ negative eigenvalues).
 
-**In Fisher coordinates.** Apply this to $v = -\nabla\mathcal{L}$, whose zeros are the critical points $\theta^*$ of the loss. Each critical point of Morse index $k$ has $\text{ind}(-\nabla\mathcal{L},\theta^*) = (-1)^k$. The Hopf-Poincaré theorem becomes:
+**In Fisher coordinates.** Apply this to $v = -\nabla\mathcal{L}$, whose zeros are the critical points of the loss. Let $\text{Crit}(\mathcal{L})$ denote the set of critical points and $\text{ind}(\theta^*)$ their Morse index. The Hopf-Poincaré theorem gives:
 
-$$\chi(\Theta) \;=\; \sum_{\theta^*\,:\,\nabla\mathcal{L}(\theta^*)=0} (-1)^{\text{ind}(\theta^*)}$$
+$$\chi(\Theta) \;=\; \sum_{p \,\in\, \text{Crit}(\mathcal{L})} (-1)^{\text{ind}(p)}$$
 
 where $\text{ind}(\theta^*)$ is the Morse index. Written by index:
 
