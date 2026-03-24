@@ -308,9 +308,9 @@ Under the identification $k = \beta d$ (the $k$-th Betti number corresponds to i
 
 The **Lusternik-Schnirelmann category** $\text{cat}(X)$ of a topological space $X$ is the minimum number of open sets needed to cover $X$, each contractible in $X$. Concretely:
 
-$$\text{cat}(X) \;=\; \min\bigl\{\, k \in \mathbb{Z}_{\geq 0} : X = U_1 \cup \cdots \cup U_{k+1},\;\; U_i \text{ contractible in } X \,\bigr\}$$
+$$\text{cat}(X) \;=\; \min\, S(X) - 1$$
 
-Equivalently, $\text{cat}(X) + 1$ is the minimum number of contractible open sets required to cover $X$.
+where $S(X)$ is the smallest integer $n$ such that $X$ can be covered by $n$ open sets $U_1, \ldots, U_n$ with each $U_i$ contractible inside $X$. Equivalently: $\text{cat}(X) + 1$ is the minimum number of contractible open sets needed to cover $X$.
 
 The **Lusternik-Schnirelmann theorem** (1934): any smooth function $f: M \to \mathbb{R}$ on a compact manifold has at least $\text{cat}(M) + 1$ critical points.
 
