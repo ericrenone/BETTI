@@ -237,7 +237,7 @@ where $\text{ind}(v,p) = (-1)^k$ at a non-degenerate zero of index $k$ (meaning 
 
 **In Fisher coordinates.** Apply this to $v = -\nabla\mathcal{L}$, whose zeros are the critical points $\theta^*$ of the loss. Each critical point of Morse index $k$ has $\text{ind}(-\nabla\mathcal{L},\theta^*) = (-1)^k$. The Hopf-Poincaré theorem becomes:
 
-$$\chi(\Theta) \;=\; \sum_{\substack{\theta^* \,:\, \nabla\mathcal{L}(\theta^*)=0}} (-1)^{\,\text{ind}(\theta^*)}$$
+$$\chi(\Theta) \;=\; \sum_{\theta^*\,:\,\nabla\mathcal{L}(\theta^*)=0} (-1)^{\text{ind}(\theta^*)}$$
 
 where $\text{ind}(\theta^*)$ is the Morse index. Written by index:
 
@@ -306,9 +306,11 @@ Under the identification $k = \beta d$ (the $k$-th Betti number corresponds to i
 
 ### Lusternik-Schnirelmann Category
 
-The **Lusternik-Schnirelmann category** $\text{cat}(X)$ of a topological space $X$ is the minimum number of open sets needed to cover $X$, each contractible in $X$:
+The **Lusternik-Schnirelmann category** $\text{cat}(X)$ of a topological space $X$ is the minimum number of open sets needed to cover $X$, each contractible in $X$. Concretely:
 
-$$\text{cat}(X) = \min\!\left\{k : X = U_1 \cup \cdots \cup U_k,\; U_i \text{ contractible in } X\right\} - 1$$
+$$\text{cat}(X) \;=\; \min\bigl\{\, k \in \mathbb{Z}_{\geq 0} : X = U_1 \cup \cdots \cup U_{k+1},\;\; U_i \text{ contractible in } X \,\bigr\}$$
+
+Equivalently, $\text{cat}(X) + 1$ is the minimum number of contractible open sets required to cover $X$.
 
 The **Lusternik-Schnirelmann theorem** (1934): any smooth function $f: M \to \mathbb{R}$ on a compact manifold has at least $\text{cat}(M) + 1$ critical points.
 
